@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Number Guessing Game</h1>
+    <p>I'm thinking of a number between 1 and 100. Can you guess it in 10 turns or less?</p>
+    <div id="previousGuesses"></div>
+    <input type="number" id="guessInput" min="1" max="100">
+    <button onclick="processGuess()" id="guessButton">Submit guess</button>
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let previousGuesses = [];
+        let turnsTaken = 0;
+
+        function processGuess() {
+            let guess = Number(document.getElementById("guessInput").value);
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                alert("Please enter a number between 1 and 100.");
+                return;
+            }
+
+            previousGuesses.push(guess);
+            turnsTaken++;
+
+            if (guess === randomNumber) {
+                alert("Congratulations! You guessed the number in " + turnsTaken + " turns.");
+                document.getElementById("guessButton").disabled = true;
+                return;
+            } else if (turnsTaken < 10) {
+                let guessText = previousGuesses.join(", ") + ".";
+                if (guess < randomNumber) {
+                    alert("Too low. Try again.");
+                } else {
+                    alert("Too high. Try again.");
+                }
+                document.getElementById("previousGuesses").innerText = "Previous guesses: " + guessText;
+            } else {
+                alert("Sorry, you didn't guess the number. The number was " + randomNumber + ".");
+                document.getElementById("guessButton").disabled = true;
+            }
+
+            document.getElementById("guessInput").value = "";
+            document.getElementById("guessInput").focus();
+        }
+
+        document.getElementById("guessButton").addEventListener("click", processGuess);
+    </script>
+</body>
+</html>
